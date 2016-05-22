@@ -7,6 +7,6 @@
  */
 require './db/Db.class.php';
 $db = new DB\Db();
-$data = $db->exec("select * from sf_admin_user")->row();
+$data = $db->query("select * from user")->result();
 echo "<pre>";
 var_dump($data);die;

@@ -5,6 +5,14 @@ class Db
     private $conn;//l连接数据库
     private $dbConf;//配置文件
     private $db;//对象
+    private $prepareSql;//预编译sql
+    private $prepareActive = false;
+
+    /**
+     * 参数绑定状态
+     * @var bool
+     */
+    private $bindValActive = false;
     private $_instance;//单例
     private $lastQuerySql;//最后一条sql
 
@@ -89,4 +97,35 @@ class Db
             return $this->db->fetchAll(\PDO::FETCH_ASSOC);
         }
     }
+    //预编译
+    public function prepare($sql)
+    {
+        try{
+            $this->db = $this->conn->prepare($sql,array(\PDO::ATTR_CURSOR=> \PDO::CURSOR_FWDONLY));
+            $this->prepareSql = $sql;
+            $this->prepareActive = true;
+            return true;
+
+        }catch (\Exception $e){
+            die($e->getMessage());
+        }
+    }
+    //绑定参数
+    public function bindValue($index,$val,$type= null)
+    {
+        if ($this->prepareActive) {
+            if (is_numeric($index))
+                $index = intval($index);
+            if (!is_null($type))
+                $this->db->bindValue($index, $val, $type);
+            else
+                $this->db->bindValue($index, $val);
+            $this->bindValActive = true;
+            return true;
+        } else {
+            $this->bindValActive = false;
+            return false;
+        }
+    }
+
 }

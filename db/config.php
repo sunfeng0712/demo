@@ -10,8 +10,8 @@ return array(
     'port' => '3306',
     'username' => 'root',
     'password' => 'root',
-    'dbname' => 'shop',
-    'dbprefix' => 'sf_',
+    'dbname' => 'sqldata',
+    'dbprefix' => '',
 
     'pconnect' => false,
     'db_debug' => true,
