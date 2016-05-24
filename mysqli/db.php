@@ -11,10 +11,11 @@ class Db
 {
     private $db;//实例化对象
     private $conn;//连接数据库
+    private static $_instance;//单例
 
     public function __construct()
     {
-        $this->connect();
+        $this->connect();//连接数据库
     }
     public function connect()
     {
@@ -31,9 +32,18 @@ class Db
             $e->getMessage();
         }
     }
+    //单例模式
+    public function getInstance()
+    {
+        if (!(self::$_instance instanceof self)) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
     public function __destruct()
     {
         $this->conn->close();
+        $this->db =  null;
     }
     //执行insert update
     public function query($sql)
@@ -107,13 +117,41 @@ class Db
     {
         try{
             $this->query($sql);
-            $affected_row = $this->affected_rows;
+            $affected_row = $this->getInsertId();
             return $affected_row;
         }catch (\Exception $e)
         {
             $e->getMessage();
         }
     }
+    //更新时，返回受影响的行数，一条更新默认是1
+    public function getAffectedRows()
+    {
+        return $this->conn->affected_rows;
+    }
+    //insert时返回自增id
+    public function getInsertId()
+    {
+        return $this->conn->insert_id;
+    }
+    //MySQL client library version return string
+    public function clientInfo()
+    {
+        return $this->conn->client_info;
+    }
+    //return int
+    public function clientVersion()
+    {
+        return $this->conn->client_version;
+    }
+    //查返回值应该有多少字段 int
+    public function fieldCount()
+    {
+        return $this->db->field_count;
+    }
+
+
+
 
 
 }

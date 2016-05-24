@@ -1,0 +1,17 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="./js/uploadify.css">
+</head>
+
+<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="./js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="./js/jquery.uploadify.js"></script>
+<body>
+<form enctype="multipart/form-data" method="post" action="upload.php">
+    <input type="text" name="token" value="<?php echo $token;?>">
+    <input type="hidden" name="url" value="<?php echo $upload_url;?>">
+    <div></div>
+    <input type="file" name="file" value="">
+</form>
+</body>
+</html>
